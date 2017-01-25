@@ -1,10 +1,9 @@
-// doc ready function
 $(function(){
   console.log('document loaded');
 
   getBooks();
 
-  // listen for a submit event on the form
+  //listen for a submit event on the form
   $('#book-form').on('submit', addBook);
 });
 
@@ -23,30 +22,29 @@ function displayBooks(books) {
 
   books.forEach(function(book){
     var $li = $('<li></li>');
-
     $li.append('<p><strong>' + book.title + '</strong></p>');
     $li.append('<p><em>' + book.author + '</em></p>');
 
-    var date = new Date(book.publication_date).toDateString();
+    var date= new Date(book.publication_date).toDateString();
     $li.append('<p><time>' + date + '</time></p>');
 
+    $li.append('<p>' + book.edition + '</p>');
+    $li.append('<p>' + book.publisher + '</p>');
+
     $('#book-list').append($li);
+
   });
-}
+};
+  function addBook(event){
+    //prevent browser form reloading
+    event.preventDefault();
 
-function addBook(event) {
-  // prevent browser from refreshing
-  event.preventDefault();
+    var formData = $(this).serialize();
 
-  // get the info out of the form
-  var formData = $(this).serialize();
-
-  // send data to server
-  $.ajax({
-    url: '/books',
-    type: 'POST',
-    data: formData,
-    success: getBooks
-  });
-
-}
+    $.ajax({
+      url: '/books',
+      type: 'POST',
+      data: formData,
+      success: getBooks
+    });
+  };
